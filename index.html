@@ -9,10 +9,10 @@
     <!-- Visualization & Content Choices: 
         - Exam Process: Report Info -> Prelims & Mains stages. Goal -> Organize. Viz -> HTML/CSS flowchart. Interaction -> None (static view). Justification -> Clearly shows the two-step progression without complex libraries. Library/Method -> HTML/CSS with Tailwind.
         - Prelims Syllabus Overview: Report Info -> Topic counts per subject. Goal -> Compare. Viz -> Horizontal Bar Chart. Interaction -> Tooltips on hover. Justification -> Best for comparing quantities across a few categories. Library/Method -> Chart.js (Canvas).
-        - Prelims Syllabus Details: Report Info -> Topic lists per subject. Goal -> Organize. Viz -> Three-column card layout with interactive checkboxes. Interaction -> Checkbox toggles strikethrough on topic text. Justification -> Allows users to track study progress. Library/Method -> HTML/CSS with Tailwind, JS for interaction.
+        - Prelims Syllabus Details: Report Info -> Topic lists per subject. Goal -> Organize. Viz -> Three-column card layout with interactive checkboxes. Interaction -> Checkbox toggles strikethrough on topic text, state saved to localStorage. Justification -> Allows users to track study progress persistently. Library/Method -> HTML/CSS with Tailwind, JS for interaction.
         - Mains Syllabus Overview: Report Info -> Topic counts for 11 subjects. Goal -> Compare. Viz -> Polar Area Chart. Interaction -> Tooltips on hover. Justification -> Visually engaging for comparing multiple categories and showing their relative "weight". Library/Method -> Chart.js (Canvas).
-        - Mains Syllabus Interactive Topics: Report Info -> Detailed topic lists per subject. Goal -> Organize/Explore. Viz -> Dynamic Text Area with interactive checkboxes. Interaction -> Clickable buttons to switch displayed topics; checkboxes toggle strikethrough. Justification -> Keeps the UI clean by showing details on demand while allowing progress tracking. Library/Method -> Vanilla JS DOM manipulation.
-        - Mains Syllabus Detailed List: Report Info -> Full topic lists. Goal -> Organize. Viz -> Multi-column card layout with interactive checkboxes. Interaction -> Checkbox toggles strikethrough. Justification -> Provides a comprehensive, static reference for all Mains topics with progress tracking. Library/Method -> HTML/CSS with Tailwind, JS for interaction.
+        - Mains Syllabus Interactive Topics: Report Info -> Detailed topic lists per subject. Goal -> Organize/Explore. Viz -> Dynamic Text Area with interactive checkboxes. Interaction -> Clickable buttons to switch displayed topics; checkboxes toggle strikethrough, state saved to localStorage. Justification -> Keeps the UI clean by showing details on demand while allowing persistent progress tracking. Library/Method -> Vanilla JS DOM manipulation.
+        - Mains Syllabus Detailed List: Report Info -> Full topic lists. Goal -> Organize. Viz -> Multi-column card layout with interactive checkboxes. Interaction -> Checkbox toggles strikethrough, state saved to localStorage. Justification -> Provides a comprehensive, static reference for all Mains topics with persistent progress tracking. Library/Method -> HTML/CSS with Tailwind, JS for interaction.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -89,67 +89,17 @@
             <div class="mt-12">
                 <h3 class="text-2xl font-bold text-center mb-6">Explore Prelims Topics</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-[#ECF0F1] p-6 rounded-lg">
+                    <div class="bg-[#ECF0F1] p-6 rounded-lg" data-subject="Quantitative Aptitude">
                         <h4 class="text-xl font-bold mb-4 text-[#2C3E50]">Quantitative Aptitude</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Number Series</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Data Interpretation</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Simplification</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Quadratic Equations</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Data Sufficiency</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Ratio and Proportion</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Discounts</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Averages</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Mixture and Alligation</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Percentages</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Profit and Loss</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Time, Speed, and Distance</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Boat and Stream</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Train</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Time and Work</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Time, Work, and Wage</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Pipe and Cistern</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Rate of Interest</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Probability</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Permutation and Combination</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Number System</label></li>
-                        </ul>
+                        <ul class="space-y-3"></ul>
                     </div>
-                    <div class="bg-[#ECF0F1] p-6 rounded-lg">
+                    <div class="bg-[#ECF0F1] p-6 rounded-lg" data-subject="Logical Reasoning">
                         <h4 class="text-xl font-bold mb-4 text-[#E74C3C]">Logical Reasoning</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Seating Arrangements</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Puzzles</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Inequalities</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Syllogism</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Input-Output</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Data Sufficiency</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Blood Relations</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Coding Decoding</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Order and Ranking</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Alphanumeric Series</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Direction & Distance</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Verbal Reasoning</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Chinese Coding</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Miscellaneous</label></li>
-                        </ul>
+                        <ul class="space-y-3"></ul>
                     </div>
-                    <div class="bg-[#ECF0F1] p-6 rounded-lg">
+                    <div class="bg-[#ECF0F1] p-6 rounded-lg" data-subject="English Language">
                         <h4 class="text-xl font-bold mb-4 text-[#7F8C8D]">English Language</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Reading Comprehension</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Cloze Test</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Fill in the Blanks / Fillers</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Error Detection / Spotting Errors</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Sentence Correction</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Sentence Improvement</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Para Jumbles / Sentence Rearrangement</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Para/Sentence Completion</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Phrase Replacement</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Word Swap</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Word Usage</label></li>
-                            <li class="flex items-center space-x-3"><input type="checkbox" class="h-4 w-4 rounded border-gray-300"><label class="text-sm text-[#34495E]">Spelling Errors</label></li>
-                        </ul>
+                        <ul class="space-y-3"></ul>
                     </div>
                 </div>
             </div>
@@ -185,11 +135,11 @@
 
     <script>
         const syllabusData = {
-            prelims: [
-                { subject: 'Quantitative Aptitude', topics: 21, color: '#2C3E50' },
-                { subject: 'Logical Reasoning', topics: 14, color: '#E74C3C' },
-                { subject: 'English Language', topics: 12, color: '#BDC3C7' }
-            ],
+            prelims: {
+                'Quantitative Aptitude': { color: '#2C3E50', topics: ['Number Series', 'Data Interpretation', 'Simplification', 'Quadratic Equations', 'Data Sufficiency', 'Ratio and Proportion', 'Discounts', 'Averages', 'Mixture and Alligation', 'Percentages', 'Profit and Loss', 'Time, Speed, and Distance', 'Boat and Stream', 'Train', 'Time and Work', 'Time, Work, and Wage', 'Pipe and Cistern', 'Rate of Interest', 'Probability', 'Permutation and Combination', 'Number System'] },
+                'Logical Reasoning': { color: '#E74C3C', topics: ['Seating Arrangements', 'Puzzles', 'Inequalities', 'Syllogism', 'Input-Output', 'Data Sufficiency', 'Blood Relations', 'Coding Decoding', 'Order and Ranking', 'Alphanumeric Series', 'Direction & Distance', 'Verbal Reasoning', 'Chinese Coding', 'Miscellaneous'] },
+                'English Language': { color: '#BDC3C7', topics: ['Reading Comprehension', 'Cloze Test', 'Fill in the Blanks / Fillers', 'Error Detection / Spotting Errors', 'Sentence Correction', 'Sentence Improvement', 'Para Jumbles / Sentence Rearrangement', 'Para/Sentence Completion', 'Phrase Replacement', 'Word Swap', 'Word Usage', 'Spelling Errors'] }
+            },
             mains: {
                 'DBMS': { color: '#E74C3C', count: 13, topics: ['Database models', 'Difference between file system and RDBMS', 'Normalization', 'Keys and constraints', 'Transaction', 'Concurrency control Management', 'E-R diagram', 'Routing', 'View and Trigger', 'Cursors', 'SQL', 'Recovery and backup', 'Miscellaneous concepts'] },
                 'Networking': { color: '#2C3E50', count: 14, topics: ['OSI model and protocols', 'Types of networks', 'Network devices and Models', 'Error detection and correction', 'TCP/IP three-way connection', 'Transmission Media', 'IP addressing', 'CSMA/CD and CSMA/CA', 'Sorting', 'IEEE standards', 'DNS', 'Network Switching', 'Firewall', 'Network security'] },
@@ -234,15 +184,49 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
+            const progressKey = 'ibpsSyllabusProgress';
+            let progress = JSON.parse(localStorage.getItem(progressKey)) || {};
+
+            const createTopicListItem = (topic, subject) => {
+                const topicId = `${subject.replace(/[^a-zA-Z0-9]/g, '-')}-${topic.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                const li = document.createElement('li');
+                li.className = 'flex items-center space-x-3';
+                li.dataset.topicId = topicId;
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'h-4 w-4 rounded border-gray-300';
+                
+                const label = document.createElement('label');
+                label.className = 'text-sm text-[#34495E]';
+                label.textContent = topic;
+
+                if (progress[topicId]) {
+                    checkbox.checked = true;
+                    label.classList.add('line-through');
+                }
+
+                li.appendChild(checkbox);
+                li.appendChild(label);
+                return li;
+            };
+
+            const prelimsSubjects = Object.keys(syllabusData.prelims);
+            const prelimsChartData = prelimsSubjects.map(subject => ({
+                subject,
+                topics: syllabusData.prelims[subject].topics.length,
+                color: syllabusData.prelims[subject].color
+            }));
+
             const prelimsCtx = document.getElementById('prelimsChart').getContext('2d');
             new Chart(prelimsCtx, {
                 type: 'bar',
                 data: {
-                    labels: syllabusData.prelims.map(d => wrapLabel(d.subject)),
+                    labels: prelimsChartData.map(d => wrapLabel(d.subject)),
                     datasets: [{
                         label: '# of Topics',
-                        data: syllabusData.prelims.map(d => d.topics),
-                        backgroundColor: syllabusData.prelims.map(d => d.color),
+                        data: prelimsChartData.map(d => d.topics),
+                        backgroundColor: prelimsChartData.map(d => d.color),
                         borderWidth: 0
                     }]
                 },
@@ -250,6 +234,17 @@
                     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false }, tooltip: chartTooltipOptions },
                     scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
+                }
+            });
+            
+            document.querySelectorAll('#prelims [data-subject]').forEach(card => {
+                const subjectName = card.dataset.subject;
+                const subjectData = syllabusData.prelims[subjectName];
+                const list = card.querySelector('ul');
+                if (subjectData && list) {
+                    subjectData.topics.forEach(topic => {
+                        list.appendChild(createTopicListItem(topic, subjectName));
+                    });
                 }
             });
 
@@ -273,20 +268,6 @@
                 }
             });
 
-            const createTopicListItem = (topic) => {
-                const li = document.createElement('li');
-                li.className = 'flex items-center space-x-3';
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'h-4 w-4 rounded border-gray-300';
-                const label = document.createElement('label');
-                label.className = 'text-sm text-[#34495E]';
-                label.textContent = topic;
-                li.appendChild(checkbox);
-                li.appendChild(label);
-                return li;
-            };
-
             const buttonContainer = document.getElementById('mains-topic-buttons');
             const topicList = document.getElementById('topic-list');
             let currentActiveButton = null;
@@ -301,7 +282,7 @@
                     currentActiveButton = button;
                     topicList.innerHTML = '';
                     syllabusData.mains[label].topics.forEach(topic => {
-                        topicList.appendChild(createTopicListItem(topic));
+                        topicList.appendChild(createTopicListItem(topic, label));
                     });
                 };
                 buttonContainer.appendChild(button);
@@ -322,7 +303,7 @@
                 list.className = 'space-y-3';
                 
                 subject.topics.forEach(topic => {
-                    list.appendChild(createTopicListItem(topic));
+                    list.appendChild(createTopicListItem(topic, label));
                 });
 
                 card.appendChild(title);
@@ -332,9 +313,13 @@
             
             document.querySelector('main').addEventListener('change', function(e) {
                 if (e.target.matches('input[type="checkbox"]')) {
+                    const li = e.target.closest('li');
+                    const topicId = li.dataset.topicId;
                     const label = e.target.nextElementSibling;
-                    if (label) {
+                    if (topicId && label) {
                         label.classList.toggle('line-through');
+                        progress[topicId] = e.target.checked;
+                        localStorage.setItem(progressKey, JSON.stringify(progress));
                     }
                 }
             });
