@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive IBPS Syllabus Application</title>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is structured as a top-down narrative journey. It starts with a high-level overview of the exam process (Prelims -> Mains) to orient the user. It then drills down into the Prelims section, using a bar chart for quick comparison of subject weight and now includes detailed topic lists. Finally, it dives into the complex Mains syllabus with a more detailed polar area chart, an interactive topic explorer, and a full static list for easy reference. This structure was chosen to guide the user from general to specific information, making the dense syllabus digestible and preventing information overload through progressive disclosure. -->
+    <!-- Visualization & Content Choices: 
+        - Exam Process: Report Info -> Prelims & Mains stages. Goal -> Organize. Viz -> HTML/CSS flowchart. Interaction -> None (static view). Justification -> Clearly shows the two-step progression without complex libraries. Library/Method -> HTML/CSS with Tailwind.
+        - Prelims Syllabus Overview: Report Info -> Topic counts per subject. Goal -> Compare. Viz -> Horizontal Bar Chart. Interaction -> Tooltips on hover. Justification -> Best for comparing quantities across a few categories. Library/Method -> Chart.js (Canvas).
+        - Prelims Syllabus Details: Report Info -> Topic lists per subject. Goal -> Organize. Viz -> Three-column card layout. Interaction -> None (static view). Justification -> Provides a clear, readable, and non-interactive list of all topics for easy reference. Library/Method -> HTML/CSS with Tailwind.
+        - Mains Syllabus Overview: Report Info -> Topic counts for 11 subjects. Goal -> Compare. Viz -> Polar Area Chart. Interaction -> Tooltips on hover. Justification -> Visually engaging for comparing multiple categories and showing their relative "weight". Library/Method -> Chart.js (Canvas).
+        - Mains Syllabus Interactive Topics: Report Info -> Detailed topic lists per subject. Goal -> Organize/Explore. Viz -> Dynamic Text Area. Interaction -> Clickable buttons to switch displayed topics. Justification -> Keeps the UI clean by showing details on demand. Library/Method -> Vanilla JS DOM manipulation.
+        - Mains Syllabus Detailed List: Report Info -> Full topic lists. Goal -> Organize. Viz -> Multi-column card layout. Interaction -> None. Justification -> Provides a comprehensive, static reference for all Mains topics. Library/Method -> HTML/CSS with Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F5;
+            color: #2C3E50;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flow-arrow {
+            font-size: 2.5rem;
+            color: #E74C3C;
+            line-height: 1;
+        }
+        .active-btn {
+            background-color: #2C3E50 !important;
+            color: #FFFFFF !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-5 text-center">
+            <h1 class="text-4xl font-bold text-[#2C3E50]">IBPS Exam Syllabus Explorer</h1>
+            <p class="text-lg text-[#34495E] mt-2">An interactive guide to navigate the Prelims & SO IT Officer Mains syllabus.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="exam-flow" class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-2">The Two-Stage Journey</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8">The IBPS selection process is a two-step journey. Candidates must first clear the Preliminary exam to qualify for the Mains, which tests specialized knowledge.</p>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
+                <div class="text-center bg-white p-6 rounded-lg shadow-lg border-t-4 border-[#E74C3C]">
+                    <h3 class="text-2xl font-bold">Stage 1: Prelims</h3>
+                    <p class="text-gray-600">Qualifying Round</p>
+                </div>
+                <div class="flow-arrow">&#8595;</div>
+                <div class="text-center bg-white p-6 rounded-lg shadow-lg border-t-4 border-[#2C3E50]">
+                    <h3 class="text-2xl font-bold">Stage 2: Mains</h3>
+                    <p class="text-gray-600">Professional Knowledge Test</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="prelims" class="mb-12 bg-white p-6 md:p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center mb-2">Prelims Syllabus Breakdown</h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">The Prelims exam is a test of core aptitude. The chart below shows the number of topics per section, while the cards underneath provide a detailed list for each subject.</p>
+            <div class="chart-container">
+                <canvas id="prelimsChart"></canvas>
+            </div>
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold text-center mb-6">Explore Prelims Topics</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-[#ECF0F1] p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4 text-[#2C3E50]">Quantitative Aptitude</h4>
+                        <ul class="space-y-2 list-disc list-inside text-[#34495E] text-sm">
+                            <li>Number Series</li><li>Data Interpretation</li><li>Simplification</li><li>Quadratic Equations</li><li>Data Sufficiency</li><li>Ratio and Proportion</li><li>Discounts</li><li>Averages</li><li>Mixture and Alligation</li><li>Percentages</li><li>Profit and Loss</li><li>Time, Speed, and Distance</li><li>Boat and Stream</li><li>Train</li><li>Time and Work</li><li>Time, Work, and Wage</li><li>Pipe and Cistern</li><li>Rate of Interest</li><li>Probability</li><li>Permutation and Combination</li><li>Number System</li>
+                        </ul>
+                    </div>
+                    <div class="bg-[#ECF0F1] p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4 text-[#E74C3C]">Logical Reasoning</h4>
+                        <ul class="space-y-2 list-disc list-inside text-[#34495E] text-sm">
+                            <li>Seating Arrangements</li><li>Puzzles</li><li>Inequalities</li><li>Syllogism</li><li>Input-Output</li><li>Data Sufficiency</li><li>Blood Relations</li><li>Coding Decoding</li><li>Order and Ranking</li><li>Alphanumeric Series</li><li>Direction & Distance</li><li>Verbal Reasoning</li><li>Chinese Coding</li><li>Miscellaneous</li>
+                        </ul>
+                    </div>
+                    <div class="bg-[#ECF0F1] p-6 rounded-lg">
+                        <h4 class="text-xl font-bold mb-4 text-[#7F8C8D]">English Language</h4>
+                        <ul class="space-y-2 list-disc list-inside text-[#34495E] text-sm">
+                            <li>Reading Comprehension</li><li>Cloze Test</li><li>Fill in the Blanks / Fillers</li><li>Error Detection / Spotting Errors</li><li>Sentence Correction</li><li>Sentence Improvement</li><li>Para Jumbles / Sentence Rearrangement</li><li>Para/Sentence Completion</li><li>Phrase Replacement</li><li>Word Swap</li><li>Word Usage</li><li>Spelling Errors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mains" class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center mb-2">SO IT Officer Mains: Interactive Explorer</h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">The Mains exam covers a wide range of computer science topics. The chart visualizes the breadth of each subject. Use the buttons to explore the topics within each category.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="chart-container">
+                    <canvas id="mainsChart"></canvas>
+                </div>
+                <div>
+                    <div id="mains-topic-buttons" class="flex flex-wrap justify-center gap-2 mb-4"></div>
+                    <div id="mains-topic-display" class="bg-[#ECF0F1] p-4 rounded-lg min-h-[200px] transition-all duration-300">
+                        <ul id="topic-list" class="list-disc list-inside space-y-1 text-[#34495E]"><li>Select a category to see the topics.</li></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="mains-details" class="mt-12 bg-white p-6 md:p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center mb-8">Detailed Mains Syllabus (All Topics)</h2>
+            <div id="mains-detailed-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 mt-8 text-gray-500">
+        <p>&copy; 2025 Syllabus Explorer. For informational purposes only.</p>
+    </footer>
+
+    <script>
+        const syllabusData = {
+            prelims: [
+                { subject: 'Quantitative Aptitude', topics: 21, color: '#2C3E50' },
+                { subject: 'Logical Reasoning', topics: 14, color: '#E74C3C' },
+                { subject: 'English Language', topics: 12, color: '#BDC3C7' }
+            ],
+            mains: {
+                'DBMS': { color: '#E74C3C', count: 13, topics: ['Database models', 'Difference between file system and RDBMS', 'Normalization', 'Keys and constraints', 'Transaction', 'Concurrency control Management', 'E-R diagram', 'Routing', 'View and Trigger', 'Cursors', 'SQL', 'Recovery and backup', 'Miscellaneous concepts'] },
+                'Networking': { color: '#2C3E50', count: 14, topics: ['OSI model and protocols', 'Types of networks', 'Network devices and Models', 'Error detection and correction', 'TCP/IP three-way connection', 'Transmission Media', 'IP addressing', 'CSMA/CD and CSMA/CA', 'Sorting', 'IEEE standards', 'DNS', 'Network Switching', 'Firewall', 'Network security'] },
+                'Data Structures': { color: '#2980B9', count: 9, topics: ['Array', 'Stack', 'Linked List', 'Queue', 'Tree', 'Graph', 'Algorithms', 'Time Complexity', 'Space Complexity'] },
+                'OOPS': { color: '#27AE60', count: 6, topics: ['Introduction', 'Classes and methods', 'Encapsulation', 'Abstraction', 'Polymorphism', 'Inheritance'] },
+                'Programming': { color: '#F39C12', count: 4, topics: ['Python', 'C++', 'C', 'Java'] },
+                'Web Tech': { color: '#8E44AD', count: 5, topics: ['Web Design', 'HTML', 'CSS', 'JavaScript', 'XML'] },
+                'Comp. Arch.': { color: '#16A085', count: 9, topics: ['Organisation', 'General register organisation', 'Interrupt', 'Modes of transfer', 'Instruction and program control', 'Virtual memory', 'Memory organization', 'Number System / Compliment', 'Boolean Algebra'] },
+                'OS': { color: '#D35400', count: 12, topics: ['System calls', 'Multithreading Programming', 'Process concept', 'Process Scheduling', 'Deadlock', 'Synchronization', 'Indexes and sequences', 'Memory management concept', 'File system', 'System protection', 'Cryptography', 'Secondary storage'] },
+                'Software Eng.': { color: '#C0392B', count: 7, topics: ['Software process', 'SDLC models', 'Debugging', 'Cohesion and coupling', 'Testing', 'PHP', 'Pipelining'] },
+                'Compiler Design': { color: '#7F8C8D', count: 7, topics: ['Linker', 'Loader', 'Phases of compilation', 'Lexical analyzer', 'Parsing Theory', 'Intermediate code generation', 'Code Optimization'] },
+                'Basics': { color: '#34495E', count: 3, topics: ['AI', 'ML', 'DL'] }
+            }
+        };
+
+        const chartTooltipOptions = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+        
+        const wrapLabel = (label) => {
+            const maxLen = 16;
+            if (label.length <= maxLen) return label;
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).trim().length > maxLen && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = currentLine ? `${currentLine} ${word}` : word;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+            return lines;
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const prelimsCtx = document.getElementById('prelimsChart').getContext('2d');
+            new Chart(prelimsCtx, {
+                type: 'bar',
+                data: {
+                    labels: syllabusData.prelims.map(d => wrapLabel(d.subject)),
+                    datasets: [{
+                        label: '# of Topics',
+                        data: syllabusData.prelims.map(d => d.topics),
+                        backgroundColor: syllabusData.prelims.map(d => d.color),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: chartTooltipOptions },
+                    scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
+                }
+            });
+
+            const mainsCtx = document.getElementById('mainsChart').getContext('2d');
+            const mainsLabels = Object.keys(syllabusData.mains);
+            const mainsData = mainsLabels.map(label => syllabusData.mains[label].count);
+            
+            new Chart(mainsCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: mainsLabels.map(wrapLabel),
+                    datasets: [{
+                        label: 'Topics', data: mainsData,
+                        backgroundColor: Object.values(syllabusData.mains).map(d => `${d.color}B3`)
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 15 } }, tooltip: chartTooltipOptions },
+                    scales: { r: { grid: { circular: true } } }
+                }
+            });
+
+            const buttonContainer = document.getElementById('mains-topic-buttons');
+            const topicList = document.getElementById('topic-list');
+            let currentActiveButton = null;
+
+            mainsLabels.forEach(label => {
+                const button = document.createElement('button');
+                button.textContent = label;
+                button.className = 'px-3 py-1.5 text-sm font-medium bg-white text-[#2C3E50] rounded-full shadow-sm hover:bg-[#ECF0F1] transition-all duration-200';
+                button.onclick = () => {
+                    if (currentActiveButton) { currentActiveButton.classList.remove('active-btn'); }
+                    button.classList.add('active-btn');
+                    currentActiveButton = button;
+                    topicList.innerHTML = '';
+                    syllabusData.mains[label].topics.forEach(topic => {
+                        const li = document.createElement('li');
+                        li.textContent = topic;
+                        topicList.appendChild(li);
+                    });
+                };
+                buttonContainer.appendChild(button);
+            });
+
+            const mainsDetailedListContainer = document.getElementById('mains-detailed-list');
+            mainsLabels.forEach(label => {
+                const subject = syllabusData.mains[label];
+                const card = document.createElement('div');
+                card.className = 'bg-[#ECF0F1] p-6 rounded-lg';
+                
+                const title = document.createElement('h4');
+                title.className = 'text-xl font-bold mb-4';
+                title.textContent = label;
+                title.style.color = subject.color;
+
+                const list = document.createElement('ul');
+                list.className = 'space-y-2 list-disc list-inside text-[#34495E] text-sm';
+                
+                subject.topics.forEach(topic => {
+                    const li = document.createElement('li');
+                    li.textContent = topic;
+                    list.appendChild(li);
+                });
+
+                card.appendChild(title);
+                card.appendChild(list);
+                mainsDetailedListContainer.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>
